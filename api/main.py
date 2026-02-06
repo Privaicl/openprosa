@@ -30,7 +30,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
 
 app = FastAPI(
-    title="Privai Platform",
+    title="OpenProsa",
     version="0.1.0",
     lifespan=lifespan,
 )

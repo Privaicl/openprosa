@@ -15,7 +15,7 @@ from core.db.base import Base
 
 # Auto-discover model modules from project packages.
 # Defaults to community packages. Set MODEL_PACKAGES env var to include more.
-_packages = os.environ.get("MODEL_PACKAGES", "core,products").split(",")
+_packages = os.environ.get("MODEL_PACKAGES", "core,dsar").split(",")
 
 for _pkg_name in _packages:
     _pkg_name = _pkg_name.strip()

@@ -1,7 +1,7 @@
 [project]
-name = "privai-platform"
+name = "openprosa"
 version = "0.1.0"
-description = "Privacy management platform — Data Classification, DSAR, and Veil"
+description = "Open-source DSAR (Data Subject Access Request) management"
 requires-python = ">=3.13"
 dependencies = [
     "fastapi>=0.115",
@@ -29,7 +29,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["core", "api", "products", "settings.py"]
+packages = ["core", "api", "dsar", "settings.py"]
 
 # ── Ruff ───────────────────────────────────────────────────────────────
 [tool.ruff]
@@ -44,41 +44,41 @@ select = ["E", "F", "I", "N", "UP", "B", "SIM", "RUF"]
 "api/dependencies.py" = ["B008"]  # FastAPI Depends() in default args is idiomatic
 
 [tool.ruff.lint.isort]
-known-first-party = ["core", "api", "products", "settings"]
+known-first-party = ["core", "api", "dsar", "settings"]
 
 # ── Pytest ─────────────────────────────────────────────────────────────
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
-testpaths = ["tests"]
+testpaths = ["api/tests", "core/tests", "dsar/tests"]
 
 # ── Import Linter ──────────────────────────────────────────────────────
 [tool.importlinter]
-root_packages = ["core", "api", "products"]
+root_packages = ["core", "api", "dsar"]
 
 [[tool.importlinter.contracts]]
 name = "Products never import from each other"
 type = "independence"
 modules = [
-    "products.classify",
-    "products.dsar",
-    "products.veil",
+
+    "dsar",
+
 ]
 
 [[tool.importlinter.contracts]]
 name = "Products never import from external packages"
 type = "forbidden"
 source_modules = [
-    "products.classify",
-    "products.dsar",
-    "products.veil",
+
+    "dsar",
+
 ]
 forbidden_modules = []
 
 [[tool.importlinter.contracts]]
-name = "Core never imports from api or products"
+name = "Core never imports from api or dsar"
 type = "forbidden"
 source_modules = ["core"]
-forbidden_modules = ["api", "products"]
+forbidden_modules = ["api", "dsar"]
 
 [[tool.importlinter.contracts]]
 name = "Community API modules use only community implementations"
