@@ -23,9 +23,7 @@ for _pkg_name in _packages:
         _pkg = importlib.import_module(_pkg_name)
     except ImportError:
         continue
-    for _, _mod_name, _ in pkgutil.walk_packages(
-        _pkg.__path__, prefix=f"{_pkg_name}."
-    ):
+    for _, _mod_name, _ in pkgutil.walk_packages(_pkg.__path__, prefix=f"{_pkg_name}."):
         if _mod_name.endswith(".models"):
             importlib.import_module(_mod_name)
 
