@@ -3,21 +3,31 @@
 from __future__ import annotations
 
 import asyncio
+import importlib
 import os
+import pkgutil
 
 from alembic import context
 from sqlalchemy import pool
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
-from core.audit.models import AuditLog  # noqa: F401
-
-# Import all models so metadata is populated
 from core.db.base import Base
-from enterprise.control_plane.models import (  # noqa: F401
-    ProductEntitlement,
-    Tenant,
-    TenantMigrationLog,
-)
+
+# Auto-discover model modules from project packages.
+# Defaults to community packages. Set MODEL_PACKAGES env var to include more.
+_packages = os.environ.get("MODEL_PACKAGES", "core,products").split(",")
+
+for _pkg_name in _packages:
+    _pkg_name = _pkg_name.strip()
+    try:
+        _pkg = importlib.import_module(_pkg_name)
+    except ImportError:
+        continue
+    for _, _mod_name, _ in pkgutil.walk_packages(
+        _pkg.__path__, prefix=f"{_pkg_name}."
+    ):
+        if _mod_name.endswith(".models"):
+            importlib.import_module(_mod_name)
 
 target_metadata = Base.metadata
 
